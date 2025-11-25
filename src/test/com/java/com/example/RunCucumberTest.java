@@ -1,6 +1,7 @@
 package com.example;
 
-import io.cucumber.junit.platform.engine.Constants;
+
+import io.cucumber.core.options.Constants;
 import org.junit.platform.suite.api.*;
 
 @Suite
@@ -8,4 +9,5 @@ import org.junit.platform.suite.api.*;
 @SelectClasspathResource("features")
 @ConfigurationParameter(key = Constants.GLUE_PROPERTY_NAME, value = "com.example.stepdefs")
 public class RunCucumberTest {
+
 }

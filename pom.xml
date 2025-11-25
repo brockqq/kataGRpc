@@ -10,13 +10,14 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.4</version>
+        <version>3.3.4</version>
         <relativePath/>
     </parent>
     <properties>
         <java.version>21</java.version>
         <protobuf.version>3.25.1</protobuf.version>
         <grpc.version>1.62.2</grpc.version>
+        <cucumber.version>7.18.1</cucumber.version>
     </properties>
 
     <dependencies>
@@ -34,11 +35,20 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
+
+        <!--
+        移除衝突依賴: Spring Boot 3.x 已經使用 Jakarta Annotation，
+        移除舊的 javax.annotation-api 以解決運行時類別載入衝突，
+        這可能是導致 TestEngine 無法被發現的主因。
+        -->
+        <!--
         <dependency>
             <groupId>javax.annotation</groupId>
             <artifactId>javax.annotation-api</artifactId>
             <version>1.3.2</version>
         </dependency>
+        -->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
@@ -68,43 +78,46 @@
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-java</artifactId>
-            <version>7.15.0</version>
+            <version>${cucumber.version}</version>
             <scope>test</scope>
         </dependency>
 
-        <!-- Cucumber 整合 JUnit 5 -->
+        <!-- Cucumber 整合 JUnit 5 (引擎) -->
         <dependency>
             <groupId>io.cucumber</groupId>
             <artifactId>cucumber-junit-platform-engine</artifactId>
-            <version>7.15.0</version>
+            <version>${cucumber.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- JUnit 5 -->
+        <!-- Cucumber 與 Spring 整合 -->
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter</artifactId>
-            <version>5.10.1</version>
+            <groupId>io.cucumber</groupId>
+            <artifactId>cucumber-spring</artifactId>
+            <version>${cucumber.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <!--
+        JUnit Platform 組件由 Spring Boot 父 POM 統一管理版本 (1.10.3)。
+        -->
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-suite</artifactId>
-            <version>1.10.1</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- 🌟 修正: 顯式添加 Launcher 依賴，確保測試執行器能夠正確啟動 JUnit Platform。-->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-launcher</artifactId>
+            <scope>test</scope>
+        </dependency>
+
         <!-- RestAssured for API 測試 -->
         <dependency>
             <groupId>io.rest-assured</groupId>
             <artifactId>rest-assured</artifactId>
             <version>5.4.0</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Hamcrest for assertions -->
-        <dependency>
-            <groupId>org.hamcrest</groupId>
-            <artifactId>hamcrest</artifactId>
-            <version>2.2</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
